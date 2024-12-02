@@ -4,32 +4,46 @@ using UnityEngine;
 
 public class physics : MonoBehaviour
 {
-	private Vector2 vel;
-	private Vector2 acc;
+	private Vector2 vel, acc;
+	private RectTransform rt;
 
-	[SerializeField] private float gravity;
-	[SerializeField, Range(0.0f, 90.0f)] private float angle;
-	[SerializeField] private float initial_velocity;
-	[SerializeField] private float viscosity;
+	[SerializeField] private UIManager UIM;
+	private float viscosity, initial_velocity, angle, gravity, mass, initialY;
 	
 	[SerializeField] private RectTransform floor;
 	private float floorY;
-	private float initialY;
-	private RectTransform rt;
+
 
     // Start is called before the first frame update
     void Start()
     {
-		floorY = floor.position.y + floor.rect.height / 2.0f;
 		rt = gameObject.GetComponent<RectTransform>();
-		
+		StartCoroutine(LateStart(1.0f));
+    }
+
+    IEnumerator LateStart(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+		Reset();
+	}
+
+	public void Reset(){
+		floorY = floor.position.y + floor.rect.height / 2.0f;
+
+		viscosity = UIM.ui_viscosity;
+		initial_velocity = UIM.ui_speed;
+		angle = UIM.ui_angle;
+		gravity = UIM.ui_gravity;
+		mass = 1.0f;
+		initialY = -3.8f;
+
+		rt.position = new Vector2(-7.1f, -3.8f);
+
 		acc = ApplyForces();
 		float rad = angle * Mathf.PI / 180.0f;
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
-
-		initialY = rt.position.y;
-    }
+	}
 	
 	Vector2 ApplyForces()
 	{
