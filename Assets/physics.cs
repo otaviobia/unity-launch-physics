@@ -6,7 +6,7 @@ public class Physics : MonoBehaviour
 	private Vector2 vel, acc;
 	private RectTransform rt;
 
-	[SerializeField] private UIManager UIM;
+	[SerializeField] private Settings UIM;
 	private float viscosity, initial_velocity, angle, gravity, mass, initialY;
 	
 	[SerializeField] private RectTransform floor;
