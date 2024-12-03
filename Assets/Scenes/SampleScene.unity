@@ -2293,7 +2293,7 @@ MonoBehaviour:
   settingName: height
   defaultValue: 0
   minValue: 0
-  maxValue: 100
+  maxValue: 28
   slider: {fileID: 0}
   input: {fileID: 0}
 --- !u!1 &791071868
