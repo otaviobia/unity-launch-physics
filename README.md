@@ -75,17 +75,18 @@ $$\begin{align}
 ### Botões
 Cada botão tem um ícone próprio, ilustrativo para sua função correspondente.
 * Configurações: Abre uma aba para modificar as condições de lançamento;
-* Lançar: Inicia a simulação com as condições especificadas;
-* Limpar: Limpa as trajetórias anteriores da tela;
+* Lançar: Reinicia a simulação com as condições especificadas;
+* Lupas: Aumentam, diminuem ou reiniciam o zoom da câmera;
 
 ### Configurações
 Acessando as configurações, é possível modificar os parâmetros e condições iniciais livremente.
-* Gravidade: varia de x a x;
-* Massa do Projétil: varia de x a x;
-* Ângulo inicial: varia de x a x, em graus;
-* Velocidade inicial: varia de x a x, em m/s;
-* Viscosidade: varia de x a x;
-* 
+* Gravidade: varia de 0,01 a 100, em m/s².
+* Massa do Projétil: varia de 0,01 a 100, em kg;
+* Ângulo inicial: varia de 0 a 90, em graus;
+* Velocidade inicial: varia de 0,01 a 100, em m/s;
+* Viscosidade: varia de 0.01 a 10, em m²/s;
+* Altura Inicial: varia de 0 a 28, em metros.
+
 ## Referências
 1. Phet Colorado, 2024. Disponível em: [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion). Acesso em 20 de novembro de 2024.
 2. Bernardes, E. de S. (2024). Dinâmica-v4 (Notas de aula). 7600105 - Física Básica I. Universidade de São Paulo, São Carlos. Acesso em 28 de novembro de 2024.
