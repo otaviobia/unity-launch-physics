@@ -1,5 +1,4 @@
-# unity launch physics
- Simulação de Lançamento Oblíquo em Unity C#.
+# Simulação de Lançamento Oblíquo em Unity C#
 
 ## 1. Integrantes do Grupo e Responsabilidades
 Disciplina: 7600105 - Física Básica I (2024).\
