@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class physics2 : MonoBehaviour
+public class Physics2 : MonoBehaviour
 {
 	[SerializeField] private RectTransform floor;
 	private float floorY;
@@ -21,7 +21,9 @@ public class physics2 : MonoBehaviour
 	private float lastCol, nextCol;
 	private Vector2 initialVel;
 
-	private bool start;
+	public event EventHandler<EventArgs> OnReady;
+
+	[HideInInspector] public bool start;
 
     // Start is called before the first frame update
     void Start()
@@ -37,15 +39,17 @@ public class physics2 : MonoBehaviour
 		Reset();
 	}
 
-	void Reset(){
+    public void Reset()
+	{
+		start = false;
 		floorY = floor.position.y + floor.rect.height / 2.0f;
 		
 		viscosity = UIM.ui_viscosity;
 		initial_velocity = UIM.ui_speed;
 		angle = UIM.ui_angle;
 		gravity = UIM.ui_gravity;
-		mass = 1.0f;
-		initialY = rt.position.y;
+		mass = UIM.ui_mass;
+		initialY = UIM.ui_height;
 		
 		tau = 1.0f / viscosity;
 
@@ -58,9 +62,9 @@ public class physics2 : MonoBehaviour
 		float iHorz = initial_velocity * Mathf.Cos(rad);
 		float iVert = initial_velocity * Mathf.Sin(rad);
 
-		col_arr[0] = 0;  col_arr[1] = Newton(iVert, -3.8f);
+		col_arr[0] = 0;  col_arr[1] = Newton(iVert, initialY);
 		vel_arr[0] = new Vector2(iHorz, iVert);
-		pos_arr[0] = new Vector2(-7.1f, -3.8f);
+		pos_arr[0] = new Vector2(-7.1f, initialY);
 		for(int i = 1; i < 49; i++){
 			float dt = col_arr[i] - col_arr[i-1];
 			vel_arr[i] = new Vector2(
@@ -73,10 +77,12 @@ public class physics2 : MonoBehaviour
 			);
 			col_arr[i+1] = col_arr[i] + Newton(vel_arr[i].y, pos_arr[i].y);
 		}
+		OnReady?.Invoke(this, EventArgs.Empty);
 		start = true;
 	}
 
-	void Update(){
+	void Update()
+	{
 		if(!start) return;
 		int i;
 		for(i = 0; i < 48; i++){
@@ -90,13 +96,28 @@ public class physics2 : MonoBehaviour
 		time += Time.deltaTime;
 	}
 
-	float Get_x(float initial_horz, float time){
+	public Vector3 Get_position(float time)
+	{
+        int i;
+        for (i = 0; i < 48; i++)
+        {
+            if (time < col_arr[i + 1]) break;
+        }
+        float x = Get_x(vel_arr[i].x, time - col_arr[i]);
+        float y = Get_y(vel_arr[i].y, time - col_arr[i]);
+
+        return pos_arr[i] + new Vector2(x, y);
+    }
+
+	float Get_x(float initial_horz, float time)
+	{
 		float x = tau * initial_horz;
 		x *= 1.0f - Mathf.Exp(-time / tau);
 		return(x);
 	}
 
-	float Get_y(float initial_vert, float time){
+    float Get_y(float initial_vert, float time)
+	{
 		float y = initial_vert * tau;
 		y += gravity * tau * tau;
 		y *= 1.0f - Mathf.Exp(-time/tau);
@@ -104,19 +125,22 @@ public class physics2 : MonoBehaviour
 		return(y);
 	}
 
-	float Get_dx(float initial_horz, float time){
+	float Get_dx(float initial_horz, float time)
+	{
 		float dx = initial_horz * Mathf.Exp(-time/tau);
 		return dx;
 	}
 
-	float Get_dy(float initial_vert, float time){
+	float Get_dy(float initial_vert, float time)
+	{
 		float dy = initial_vert + gravity * tau;
 		dy *= Mathf.Exp(-time / tau);
 		dy -= gravity * tau;
 		return(dy);
 	}
 	
-	float Get_t0(float initial_vert){
+	float Get_t0(float initial_vert)
+	{
 		float t0 = gravity * tau;
 		t0 /= initial_vert + gravity * tau;
 		t0 = Mathf.Log(t0);
@@ -124,15 +148,15 @@ public class physics2 : MonoBehaviour
 		return(t0);
 	}
 
-	float Newton(float initial_vert, float initial_y){
+	float Newton(float initial_vert, float initial_y)
+	{
 		float t = 2.0f * Get_t0(initial_vert) + 0.1f; // angle = 0
 		if(initial_vert < 0) t = 0;
-		for(int i = 0; i < 20; i++){
+		for(int i = 0; i < 20; i++)
+		{
 			float deltaY = initial_y - rt.rect.height/2.0f - floorY;
 			t -= (Get_y(initial_vert, t) + deltaY)/Get_dy(initial_vert, t);
 		}
 		return t;
 	}
-
-	
 }

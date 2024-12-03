@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class physics : MonoBehaviour
+public class Physics : MonoBehaviour
 {
 	private Vector2 vel, acc;
 	private RectTransform rt;
@@ -34,10 +33,10 @@ public class physics : MonoBehaviour
 		initial_velocity = UIM.ui_speed;
 		angle = UIM.ui_angle;
 		gravity = UIM.ui_gravity;
-		mass = 1.0f;
-		initialY = -3.8f;
+		mass = UIM.ui_mass;
+		initialY = UIM.ui_height;
 
-		rt.position = new Vector2(-7.1f, -3.8f);
+		rt.position = new Vector2(-7.1f, initialY);
 
 		acc = ApplyForces();
 		float rad = angle * Mathf.PI / 180.0f;
@@ -95,6 +94,4 @@ public class physics : MonoBehaviour
 		pE -= gravity * tau * Time.time;
 		pE *= 1.0f * gravity;
     }
-
-	
 }
