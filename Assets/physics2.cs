@@ -13,7 +13,7 @@ public class Physics2 : MonoBehaviour
 
 	private RectTransform rt;
 
-	[SerializeField] private float[] col_arr;
+	[SerializeField] public float[] col_arr;
 	[SerializeField] private Vector2[] vel_arr, pos_arr;
 	private float time;
 

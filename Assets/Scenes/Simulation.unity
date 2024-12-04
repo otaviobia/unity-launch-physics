@@ -4720,7 +4720,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: angle
   defaultValue: 45
-  minValue: 0
+  minValue: -90
   maxValue: 90
   slider: {fileID: 0}
   input: {fileID: 0}
