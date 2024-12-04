@@ -2726,7 +2726,7 @@ MonoBehaviour:
   trajectoryRenderer: {fileID: 2073440261}
   physics2: {fileID: 1625128542}
   pointsToGenerate: 10000
-  deltaT: 0.1
+  deltaT: 0.02
 --- !u!114 &852042814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9317,7 +9317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: viscosity
   defaultValue: 0.5
-  minValue: 0.01
+  minValue: 0
   maxValue: 10
   slider: {fileID: 0}
   input: {fileID: 0}
@@ -9379,7 +9379,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Positions: []
   m_Parameters:
     serializedVersion: 3

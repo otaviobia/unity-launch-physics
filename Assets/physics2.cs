@@ -24,6 +24,8 @@ public class Physics2 : MonoBehaviour
 	public event EventHandler<EventArgs> OnReady;
 
 	[HideInInspector] public bool start;
+	
+	// [TODO] Viscosity = 0.0f
 
     // Start is called before the first frame update
     void Start()
@@ -51,7 +53,7 @@ public class Physics2 : MonoBehaviour
 		mass = UIM.ui_mass;
 		initialY = UIM.ui_height;
 		
-		tau = 1.0f / viscosity;
+		tau = mass / viscosity;
 
 		time = 0.0f;
 		col_arr = new float[50];
@@ -84,14 +86,7 @@ public class Physics2 : MonoBehaviour
 	void Update()
 	{
 		if(!start) return;
-		int i;
-		for(i = 0; i < 48; i++){
-			if(time < col_arr[i + 1]) break;
-		}
-		float x = Get_x(vel_arr[i].x, time - col_arr[i]);
-		float y = Get_y(vel_arr[i].y, time - col_arr[i]);
-
-		rt.position = pos_arr[i] + new Vector2(x, y);
+		rt.position = Get_position(time);
 
 		time += Time.deltaTime;
 	}
@@ -103,6 +98,7 @@ public class Physics2 : MonoBehaviour
         {
             if (time < col_arr[i + 1]) break;
         }
+		if(i >= 48) time = col_arr[i];
         float x = Get_x(vel_arr[i].x, time - col_arr[i]);
         float y = Get_y(vel_arr[i].y, time - col_arr[i]);
 
@@ -111,6 +107,9 @@ public class Physics2 : MonoBehaviour
 
 	float Get_x(float initial_horz, float time)
 	{
+		if(viscosity == 0.0f) {
+			return initial_horz * time;
+		}
 		float x = tau * initial_horz;
 		x *= 1.0f - Mathf.Exp(-time / tau);
 		return(x);
@@ -118,6 +117,9 @@ public class Physics2 : MonoBehaviour
 
     float Get_y(float initial_vert, float time)
 	{
+		if(viscosity == 0.0f){
+			return initial_vert * time - gravity * time * time / 2.0f;
+		}
 		float y = initial_vert * tau;
 		y += gravity * tau * tau;
 		y *= 1.0f - Mathf.Exp(-time/tau);
@@ -127,12 +129,18 @@ public class Physics2 : MonoBehaviour
 
 	float Get_dx(float initial_horz, float time)
 	{
+		if(viscosity == 0.0f){
+			return initial_horz;
+		}
 		float dx = initial_horz * Mathf.Exp(-time/tau);
 		return dx;
 	}
 
 	float Get_dy(float initial_vert, float time)
 	{
+		if(viscosity == 0.0f){
+			return initial_vert - gravity * time;
+		}
 		float dy = initial_vert + gravity * tau;
 		dy *= Mathf.Exp(-time / tau);
 		dy -= gravity * tau;
@@ -150,6 +158,9 @@ public class Physics2 : MonoBehaviour
 
 	float Newton(float initial_vert, float initial_y)
 	{
+		if(viscosity == 0.0f){
+			return 2.0f * initial_vert / gravity;
+		}
 		float t = 2.0f * Get_t0(initial_vert) + 0.1f; // angle = 0
 		if(initial_vert < 0) t = 0;
 		for(int i = 0; i < 20; i++)

@@ -12,10 +12,12 @@ public class Physics : MonoBehaviour
 	[SerializeField] private RectTransform floor;
 	private float floorY;
 
+	private bool start;
 
     // Start is called before the first frame update
     void Start()
     {
+		start = false;
 		rt = gameObject.GetComponent<RectTransform>();
 		StartCoroutine(LateStart(1.0f));
     }
@@ -27,6 +29,7 @@ public class Physics : MonoBehaviour
 	}
 
 	public void Reset(){
+		start = false;
 		floorY = floor.position.y + floor.rect.height / 2.0f;
 
 		viscosity = UIM.ui_viscosity;
@@ -38,15 +41,16 @@ public class Physics : MonoBehaviour
 
 		rt.position = new Vector2(-7.1f, initialY);
 
-		acc = ApplyForces();
+		acc = ApplyForces() / mass;
 		float rad = angle * Mathf.PI / 180.0f;
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
+		start = true;
 	}
 	
 	Vector2 ApplyForces()
 	{
-		Vector2 Fg = Vector2.down * gravity;
+		Vector2 Fg = Vector2.down * gravity * mass;
 		Vector2 Fv = -vel * viscosity;
 		return(Fg + Fv);
 	}
@@ -54,12 +58,14 @@ public class Physics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if(!start) return;
+
 		// Verlet Integration
 		float dt = Time.deltaTime;
 		Vector2 pos = transform.position;
 
 		Vector2 newPos = pos + vel*dt + acc*(dt*dt/2.0f);
-		Vector2 newAcc = ApplyForces();
+		Vector2 newAcc = ApplyForces() / mass;
 		Vector2 newVel = vel + (acc + newAcc)*(dt/2.0f);
 
 		// Resolve Collisions
@@ -77,21 +83,7 @@ public class Physics : MonoBehaviour
 		acc = newAcc;
 		
 		// Update energy
-		float kinectEnergy = vel.sqrMagnitude / 2.0f;
-		float potentialEnergy = gravity * (bottomY - floorY);
-		
-		float tau = 1.0f / viscosity;
-		float kE = initial_velocity * initial_velocity;
-		kE -= gravity * gravity * tau * tau;
-		kE *= Mathf.Exp(-2.0f * Time.time / tau);
-		kE += tau * tau * gravity * gravity;
-		kE *= 1.0f / 2.0f;
-
-		float pE = initial_velocity * Mathf.Sin(angle * Mathf.PI / 180.0f);
-		pE *= tau;
-		pE += gravity * tau * tau;
-		pE *= 1 - Mathf.Exp(-Time.time / tau);
-		pE -= gravity * tau * Time.time;
-		pE *= 1.0f * gravity;
+		float kinectEnergy = mass * vel.sqrMagnitude / 2.0f;
+		float potentialEnergy = mass * gravity * (bottomY - floorY);
     }
 }
