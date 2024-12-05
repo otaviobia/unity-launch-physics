@@ -126,6 +126,12 @@ public class Physics2 : MonoBehaviour {
 					Get_x(vel_arr[0].x, dt),
 					Get_y(vel_arr[0].y, dt)
 				);
+				if(Mathf.Abs(pos_arr[1].y) > 1.0f){ // Não achou raiz
+					col_arr[1] = 0.0f;
+					pos_arr[1] = pos_arr[0];
+					vel_arr[1] = vel_arr[0];
+					myCase = Case.noCol;
+				}
 				for(int i = 2; i < nCol; i++){ 
 					col_arr[i] = col_arr[1]; 
 					pos_arr[i] = pos_arr[1]; 
@@ -301,6 +307,9 @@ public class Physics2 : MonoBehaviour {
 			if(initial_vert < 0) t = 0.0f;
 			for(int i = 0; i < nNewton; i++) {
 				float deltaY = initial_y - rt.rect.height/2.0f - floorY;
+				float fx = Get_y(initial_vert, t) + deltaY;
+				float fp = Get_dy(initial_vert, t);
+				if(fx == 0.0f || fp == 0.0f) return t;
 				t -= (Get_y(initial_vert, t) + deltaY)/Get_dy(initial_vert, t);
 			}
 		}
