@@ -26,6 +26,17 @@ public class CameraZoom : MonoBehaviour
     }
 
     /*
+     * Controlar o zoom da câmera com o scroll do mouse.
+     */
+    private void Update()
+    {
+        if (Input.mouseScrollDelta.y < 0) ZoomOut();
+        else if (Input.mouseScrollDelta.y > 0) ZoomIn();
+
+        if (Input.GetKeyDown(KeyCode.Mouse2)) ZoomReset();
+    }
+
+    /*
      * A função ZoomReset é chamada ao apertar o botão da lupa com a seta de retorno na interface.
      * Volta aos padrões de tamanho ortográfico da câmera e tela.
      */

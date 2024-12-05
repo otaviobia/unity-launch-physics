@@ -12,6 +12,7 @@ public class CameraMovement : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private float cameraSpeed;
     [SerializeField] private float minXBoundary;
+    [SerializeField] private float minYBoundary;
 
     private bool movingRight = false, movingLeft = false;
 
@@ -20,9 +21,8 @@ public class CameraMovement : MonoBehaviour
     */
     private void Update()
     {
-        float halfCameraWidth = sceneCamera.orthographicSize * sceneCamera.aspect;
-
-        float leftEdge = sceneCamera.transform.position.x - halfCameraWidth;
+        float leftEdge = sceneCamera.transform.position.x - sceneCamera.orthographicSize * sceneCamera.aspect;
+        float bottomEdge = sceneCamera.transform.position.y - sceneCamera.orthographicSize;
 
         if (leftEdge <= minXBoundary)
         {
@@ -33,6 +33,12 @@ public class CameraMovement : MonoBehaviour
         {
             leftButton.SetActive(true);
         }
+
+        if (Input.GetKey(KeyCode.UpArrow)) sceneCamera.transform.Translate(Vector3.up * cameraSpeed * Time.deltaTime);
+        else if (Input.GetKey(KeyCode.DownArrow) && bottomEdge > minYBoundary) sceneCamera.transform.Translate(Vector3.down * cameraSpeed * Time.deltaTime);
+
+        if (Input.GetKey(KeyCode.RightArrow)) sceneCamera.transform.Translate(Vector3.right * cameraSpeed * Time.deltaTime);
+        else if (Input.GetKey(KeyCode.LeftArrow) && leftEdge > minXBoundary) sceneCamera.transform.Translate(Vector3.left * cameraSpeed * Time.deltaTime);
 
         if (movingLeft)
             sceneCamera.transform.Translate(Vector3.left * cameraSpeed * Time.deltaTime);
