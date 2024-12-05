@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: speed
   defaultValue: 10
-  minValue: 0.01
+  minValue: 0
   maxValue: 100
   slider: {fileID: 0}
   input: {fileID: 0}
@@ -4975,7 +4975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: mass
   defaultValue: 1
-  minValue: 0.01
+  minValue: 0.1
   maxValue: 100
   slider: {fileID: 0}
   input: {fileID: 0}
@@ -6568,9 +6568,9 @@ MonoBehaviour:
   mass: 0
   initialY: 0
   col_arr: []
-  vel_arr: []
-  pos_arr: []
   start: 0
+  nCol: 50
+  nNewton: 20
 --- !u!212 &1625128543
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7361,7 +7361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingName: gravity
   defaultValue: 9.81
-  minValue: 0.01
+  minValue: 0
   maxValue: 100
   slider: {fileID: 0}
   input: {fileID: 0}

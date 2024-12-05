@@ -41,10 +41,12 @@ public class Physics : MonoBehaviour
 
 		rt.position = new Vector2(-7.1f, initialY);
 
-		acc = ApplyForces() / mass;
+		//acc = ApplyForces() / mass;
+		acc = Vector2.zero;
 		float rad = angle * Mathf.PI / 180.0f;
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
+		Debug.Log(acc);
 		start = true;
 	}
 	
@@ -70,7 +72,7 @@ public class Physics : MonoBehaviour
 
 		// Resolve Collisions
 		float bottomY = newPos.y - rt.rect.height / 2.0f; 
-		if(bottomY <= floorY){ // Torricelli
+		if(bottomY < floorY){ // Torricelli
 			float deltaS = floorY - bottomY;
 			float v0 = Mathf.Sqrt(newVel.y * newVel.y + 2.0f * newAcc.y * deltaS);
 			newPos += Vector2.up * deltaS;
