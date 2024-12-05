@@ -40,8 +40,18 @@ public class Physics2 : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
 		Reset();
 	}
+	
+	void Update() {
+		if(!start) return;
+		rt.position = Get_position(time);
 
-    public void Reset() {
+		time += Time.deltaTime;
+	}
+
+	/*-------------------------------------------------------------------------*\
+	| Reset() atualiza as variaveis, (re)calcula as colisões e reseta asimulação
+	\*-------------------------------------------------------------------------*/
+	public void Reset() {
 		start = false;
 		floorY = floor.position.y + floor.rect.height / 2.0f;
 		
@@ -55,9 +65,9 @@ public class Physics2 : MonoBehaviour
 		tau = mass / viscosity;
 
 		time = 0.0f;
-		col_arr = new float[nCol];
-		vel_arr = new Vector2[nCol];
-		pos_arr = new Vector2[nCol];
+		col_arr = new float[nCol]; // Tempo em que ocorrem as colisões
+		vel_arr = new Vector2[nCol]; // Velocidade da particula após as colisões
+		pos_arr = new Vector2[nCol]; // Posição da particula no momento da colisão
 
 		float rad = angle * Mathf.PI / 180.0f;
 		float iHorz = initial_velocity * Mathf.Cos(rad);
@@ -75,6 +85,7 @@ public class Physics2 : MonoBehaviour
 		switch(myCase){
 			case Case.floor:
 			case Case.noCol:
+				// Não há colisões, assim preenchemos os vetores com as condições iniciais
 				for(int i = 1; i < nCol; i++){
 					col_arr[i] = 0.0f;
 					vel_arr[i] = new Vector2(iHorz, iVert);
@@ -82,6 +93,8 @@ public class Physics2 : MonoBehaviour
 				}
 				break;
 			case Case.oneCol:
+				// Como há uma unica colisão, o vetor possui apenas as condições inicias
+				// e as condições após a primeira colisão, repetidas até o fim.
 				col_arr[1] = GetRoot(iVert, initialY);
 				dt = col_arr[1] - col_arr[0];
 				vel_arr[1] = new Vector2(
@@ -99,6 +112,7 @@ public class Physics2 : MonoBehaviour
 				}
 				break;
 			case Case.manyCol:
+				// Calcula todas as colisões até o fim do vetor
 				col_arr[1] = GetRoot(iVert, initialY);
 				for(int i = 1; i < nCol - 1; i++){
 					dt = col_arr[i] - col_arr[i-1];
@@ -119,25 +133,32 @@ public class Physics2 : MonoBehaviour
 		start = true;
 	}
 
-	void Update() {
-		if(!start) return;
-		rt.position = Get_position(time);
 
-		time += Time.deltaTime;
-	}
-
+	/*-------------------------------------------------------------------------*\
+	| Get_position() retorna a posição da particula após o tempo time do inicio
+	                 da simulação.
+	\*-------------------------------------------------------------------------*/
 	public Vector3 Get_position(float time) {
+		// Acha a ultima colisão que ocorreu: col_arr[i]
         int i;
         for (i = 0; i < nCol - 2; i++) if (time < col_arr[i + 1]) break;
 
+		// Calcula a posição
         float x = Get_x(vel_arr[i].x, time - col_arr[i]);
         float y = Get_y(vel_arr[i].y, time - col_arr[i]);
+		// Após o fim da ultima colisão não atualiza mais o y
+		// Isso evita que a particula caia pelo chão
 		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor))
 			y = Get_y(vel_arr[i].y, 0.0f);
 
         return pos_arr[i] + new Vector2(x, y);
     }
 
+
+	/*-------------------------------------------------------------------------*\
+	| Get_x() e Get_y() retornam as coordenadas da particula após o tempo time
+	                    desde a ultima colisão.
+	\*-------------------------------------------------------------------------*/
 	float Get_x(float initial_horz, float time) {
 		if(viscosity == 0.0f) 
 			return initial_horz * time;
@@ -156,6 +177,10 @@ public class Physics2 : MonoBehaviour
 		return(y);
 	}
 
+	/*-------------------------------------------------------------------------*\
+	| Get_dx() e Get_dy() retornam as coordenadas da velocidade da particula
+	                      após um tempo time desde a ultima colisão.
+	\*-------------------------------------------------------------------------*/
 	float Get_dx(float initial_horz, float time) {
 		if(viscosity == 0.0f)
 			return initial_horz;
@@ -172,14 +197,29 @@ public class Physics2 : MonoBehaviour
 		return(dy);
 	}
 	
+
+	/*-------------------------------------------------------------------------*\
+	| Get_t0() retorna uma estimativa inicial para a raiz de Get_y(), sendo
+	           usada no método de Newton.
+	\*-------------------------------------------------------------------------*/
 	float Get_t0(float initial_vert) { // Dy == 0
-		float t0 = gravity * tau;
-		t0 /= initial_vert + gravity * tau;
-		t0 = Mathf.Log(t0);
-		t0 *= - tau;
-		return(t0);
+		// Caso a trajétoria inicie com velocidade vertical negativa,
+		// seu inicio é uma boa aproximação para a raiz desejada.
+		if(initial_vert < 0) return 0.0f;
+
+		// tm é o ponto em que Get_dy == 0, ou seja, o ponto de máximo da trajetória
+		float tm = gravity * tau;
+		tm /= initial_vert + gravity * tau;
+		tm = Mathf.Log(tm);
+		tm *= - tau;
+
+		return 2.0f * tm + 0.1f; // Usa o tm para estimar um zero de Get_y()
 	}
 
+	/*-------------------------------------------------------------------------*\
+	| GetRoot() retorna a raiz de Get_y(), assim conseguimos calcular a próxima
+	            colisão da particula.
+	\*-------------------------------------------------------------------------*/
 	float GetRoot(float initial_vert, float initial_y) {
 		float t;
 		if(viscosity == 0.0f && gravity == 0.0f){ // Mov. linear
@@ -190,7 +230,7 @@ public class Physics2 : MonoBehaviour
 			t += initial_vert;
 			t /= gravity;
 		} else { // Método de Newton
-			t = 2.0f * Get_t0(initial_vert) + 0.1f; // add 0.1f in case angle == 0
+			t = Get_t0(initial_vert);
 			if(initial_vert < 0) t = 0.0f;
 			for(int i = 0; i < nNewton; i++) {
 				float deltaY = initial_y - rt.rect.height/2.0f - floorY;
