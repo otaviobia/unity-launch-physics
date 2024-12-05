@@ -29,13 +29,13 @@ Existem duas opções para a simulação, que podem ser comparadas ao mesmo temp
 A força gravitacional $\vec{F_g}$ pode ser expressa por:
 
 $$\begin{equation}
-\vec{F_g} = -mg \hat{j},
+\vec{F}\_g = -mg \hat{j},
 \end{equation}$$
 
 em que $m$ é a massa do corpo afetado, $g$ a gravidade e $\hat{k}$ o versor que indica a direção do movimento, neste caso, para cima. Vale notar que esta é uma força constante, que não depende da trajetória, apenas da gravidade local.
 
 ### Força Viscosa
-A força viscosa $\vec{F_v}$ é expressa por:
+A força viscosa $\vec{F}\_v$ é expressa por:
 
 $$\begin{equation}
 \vec{F_v} = -b\vec{v},
@@ -73,7 +73,7 @@ x(0) &= y(0) = 0,\\
 Aplicando a 2ª Lei de Newton, chegamos às seguintes equações
 
 $$\begin{align}
--mg\hat{j} -b\vec{v(t)} &= m(\ddot{x}(t)\hat{i} + \ddot{y}(t)\hat{j}),\\
+-mg\hat{j} -b\vec{v}(t) &= m(\ddot{x}(t)\hat{i} + \ddot{y}(t)\hat{j}),\\
 \ddot{x}(t) + b{y}(t) &= 0,\\
 \ddot{y}(t) + b{y}(t) + mg &= 0,
 \end{align}$$
