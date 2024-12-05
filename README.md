@@ -96,7 +96,15 @@ sendo $\tau$ definida como $\frac{m}{b}$.
 
 ### Integração de Verlet
 O método de Verlet é um algoritmo utilizado para o cálculo das posições de um corpo, muito usado para simulações, como em nosso caso.\
-Seu algoritmo busca reduzir o nível de erros nos cálculos utilizando as posições e aceleração anteriores para o cálculo da próxima posição. Assim, a cada pequena variação no tempo, a posição é recalculada e as variáveis são atualizadas para o próximo cálculo. Uma de suas vantagens é a conservação aproximada da energia do sistema, e é considerado um método mais estável que o de Euler.
+Seu algoritmo busca reduzir o nível de erros nos cálculos utilizando as posições e aceleração anteriores para o cálculo da próxima posição. Assim, a cada pequena variação no tempo, a posição é recalculada e as variáveis são atualizadas para o próximo cálculo. Uma de suas vantagens é a conservação aproximada da energia do sistema, e é considerado um método mais estável que o de Euler. Suas equações são dadas por:
+
+$$\begin{align}
+S_{n+1} &= S + v_n \cdot \delta t + \dfrac{a_n }{2} \cdot \delta t^2,\\
+a_{n+1} &= \dfrac{F_n}{m}, \\
+v_{n+1} &= v_n + \dfrac{a_n + a_{n+1}}{2} \delta t
+\end{align}$$
+
+Em que $S_{n+1}$ é a próxima posição, $a_{n+1}$ a próxima aceleração e $v_{n+1}$ a próxima velocidade, todas após uma pequena variação de tempo.
 
 ## 4. O Projeto
 <!-- Como acessar o projeto -->
@@ -106,6 +114,13 @@ Cada botão tem um ícone próprio, ilustrativo para sua função correspondente
 * Lançar: Reinicia a simulação com as condições especificadas;
 * Lupas: Aumentam, diminuem ou reiniciam o zoom da câmera (pode ser alterado pelo scroll do mouse);
 * Setas: Movimentam a câmera horizontalmente (pode ser movido com as setinhas do teclado);
+
+<!-- Print só dos botões 
+<p align="center">
+  <img src="imagens/Botoes.png" alt="Descrição da imagem">
+  <br>
+</p>
+-->
 
 ### Configurações
 Acessando as configurações, é possível modificar os parâmetros e condições iniciais livremente.
@@ -120,7 +135,15 @@ Acessando as configurações, é possível modificar os parâmetros e condiçõe
 * Colisões calculadas: varia de 0 a 100;
 * Iterações do Método de Newton: varia de 0 a 100;
 
+<!-- Print só da barra de configurações aberta 
+<p align="center">
+  <img src="imagens/Config.png" alt="Descrição da imagem">
+  <br>
+</p>
+-->
+
 ## Referências
 1. Phet Colorado, 2024. Disponível em: [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion). Acesso em 20 de novembro de 2024.
 2. Bernardes, E. de S. (2024). Dinâmica-v4 (Notas de aula). 7600105 - Física Básica I. Universidade de São Paulo, São Carlos. Acesso em 28 de novembro de 2024.
-3. FREIRE, Wilson Hugo C.; MEDEIROS, Marciano L.; LEITE, Daniela; SILVA, Raffaela M. Lançamento oblíquo com resistência do ar: Uma análise qualitativa. SciELO Brasil, [s. l.], 30 set. 2015. Disponível em: https://doi.org/10.1590/S1806-11173812085. Acesso em: 5 dez. 2024.
+3. VERLET integration. In: WIKIPÉDIA: a enciclopédia livre. Disponível em: https://en.wikipedia.org/wiki/Verlet_integration. Acesso em: 04 de dezembro de 2024. 
+4. FREIRE, Wilson Hugo C.; MEDEIROS, Marciano L.; LEITE, Daniela; SILVA, Raffaela M. Lançamento oblíquo com resistência do ar: Uma análise qualitativa. SciELO Brasil, [s. l.], 30 set. 2015. Disponível em: https://doi.org/10.1590/S1806-11173812085. Acesso em: 05 de dezembro de 2024.
