@@ -14,6 +14,7 @@ public class CameraZoom : MonoBehaviour
     [SerializeField] private int maxZoom;
 
     private float defaultZoom;
+    private bool mouseOverSettings;
     private Vector3 defaultPosition;
 
     /*
@@ -30,8 +31,11 @@ public class CameraZoom : MonoBehaviour
      */
     private void Update()
     {
-        if (Input.mouseScrollDelta.y < 0) ZoomOut();
-        else if (Input.mouseScrollDelta.y > 0) ZoomIn();
+        if (!mouseOverSettings)
+        {
+            if (Input.mouseScrollDelta.y < 0) ZoomOut();
+            else if (Input.mouseScrollDelta.y > 0) ZoomIn();
+        }     
 
         if (Input.GetKeyDown(KeyCode.Mouse2)) ZoomReset();
     }
@@ -72,5 +76,10 @@ public class CameraZoom : MonoBehaviour
             sceneCamera.transform.position = new(sceneCamera.transform.position.x 
                 + 1.8f * zoomAmount, sceneCamera.transform.position.y + zoomAmount, -10);
         }
+    }
+
+    public void SetMouseOverSettings(bool status)
+    {
+        mouseOverSettings = status;
     }
 }

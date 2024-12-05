@@ -12,7 +12,7 @@ public class Settings : MonoBehaviour
     [SerializeField] private RectTransform _settingsButton;
     [SerializeField] private RectTransform _settingsPanel;
 
-    [HideInInspector] public float ui_gravity, ui_speed, ui_angle, ui_viscosity, ui_mass, ui_height;
+    [HideInInspector] public float ui_gravity, ui_speed, ui_angle, ui_viscosity, ui_mass, ui_height, ui_timestep, ui_collisions, ui_iterations;
     private bool settingsPanelOpen = false;
 
     /*
@@ -54,6 +54,15 @@ public class Settings : MonoBehaviour
             case "height":
                 ui_height = thisSetting.slider.value;
                 break;
+            case "timestep":
+                ui_timestep = thisSetting.slider.value;
+                break;
+            case "collisions":
+                ui_collisions = thisSetting.slider.value;
+                break;
+            case "iterations":
+                ui_iterations = thisSetting.slider.value;
+                break;
             default:
                 Debug.Log("O nome da configuração não está escrito corretamente!");
                 break;
@@ -88,6 +97,15 @@ public class Settings : MonoBehaviour
                 break;
             case "height":
                 ui_height = newValue;
+                break;
+            case "timestep":
+                ui_timestep = newValue;
+                break;
+            case "collisions":
+                ui_collisions = newValue;
+                break;
+            case "iterations":
+                ui_iterations = newValue;
                 break;
             default:
                 Debug.Log("O nome da configuração não está escrito corretamente!");
