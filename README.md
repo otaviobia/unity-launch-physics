@@ -82,7 +82,7 @@ Cada botão tem um ícone próprio, ilustrativo para sua função correspondente
 * Configurações: Abre uma aba para modificar as condições de lançamento;
 * Lançar: Reinicia a simulação com as condições especificadas;
 * Lupas: Aumentam, diminuem ou reiniciam o zoom da câmera;
-* Setas: Movimentam a câmera horizontalmente;
+* Setas: Movimentam a câmera horizontalmente.
 
 ### Configurações
 Acessando as configurações, é possível modificar os parâmetros e condições iniciais livremente.
