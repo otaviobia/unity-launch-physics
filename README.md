@@ -47,19 +47,19 @@ em que $b>0$ e $\vec{v}$ a velocidade do corpo afetado. Essa força tem relaçã
 Nosso projétil sofre a ação de ambas as forças descritas acima, tendo sua posição nos eixos $x$ (horizontal, orientado positivamente para a direita) e $y$ (vertical, orientado positivamente para cima) representada por:
 
 $$\begin{equation}
-\vec{r(t)} = x(t) \hat{i} + y(t) \hat{j}.
+\vec{r}(t) = x(t) \hat{i} + y(t) \hat{j}.
 \end{equation}$$
 
 Sua velocidade, derivada da posição, se dá por:
 
 $$\begin{equation}
-\vec{v(t)} = \dot{x}(t) \hat{i} + \dot{y}(t) \hat{j},
+\vec{v}(t) = \dot{x}(t) \hat{i} + \dot{y}(t) \hat{j},
 \end{equation}$$
 
 e sua aceleração, derivada segunda da posição e primeira da velocidade é:
 
 $$\begin{equation}
-\vec{a(t)} = \ddot{x}(t) \hat{i} + \ddot{y}(t) \hat{j}.
+\vec{a}(t) = \ddot{x}(t) \hat{i} + \ddot{y}(t) \hat{j}.
 \end{equation}$$
 
 Como condições iniciais, temos:
@@ -99,12 +99,12 @@ O método de Verlet é um algoritmo utilizado para o cálculo das posições de 
 Seu algoritmo busca reduzir o nível de erros nos cálculos utilizando as posições e aceleração anteriores para o cálculo da próxima posição. Assim, a cada pequena variação no tempo, a posição é recalculada e as variáveis são atualizadas para o próximo cálculo. Uma de suas vantagens é a conservação aproximada da energia do sistema, e é considerado um método mais estável que o de Euler. Suas equações são dadas por:
 
 $$\begin{align}
-\vec{S_{n+1}} &= \vec{S} + \vec{v_n} \cdot \Delta t + \dfrac{\vec{a_n}}{2} \cdot \Delta t^2,\\
-\vec{a_{n+1}} &= \dfrac{\vec{F_n}}{m}, \\
-\vec{v_{n+1}} &= \vec{v_n} + \dfrac{\vec{a_n} + \vec{a_{n+1}}}{2} \Delta t,
+\vec{S}\_{n+1} &= \vec{S} + \vec{v}\_n \cdot \Delta t + \dfrac{\vec{a}\_n}{2} \cdot \Delta t^2,\\
+\vec{a}\_{n+1} &= \dfrac{\vec{F}\_n}{m}, \\
+\vec{v}\_{n+1} &= \vec{v}\_n + \dfrac{\vec{a}\_n + \vec{a}\_{n+1}}{2} \Delta t,
 \end{align}$$
 
-em que $\vec{S_{n+1}}$ é a próxima posição, $\vec{a_{n+1}}$ a próxima aceleração e $\vec{v_{n+1}}$ a próxima velocidade, todas após uma pequena variação de tempo.
+em que $\vec{S}\_{n+1}$ é a próxima posição, $\vec{a}\_{n+1}$ a próxima aceleração e $\vec{v}\_{n+1}$ a próxima velocidade, todas após uma pequena variação de tempo.
 
 ### Colisões
 Vale ressaltar que as colisões do corpo com o chão foram consideradas perfeitamente elásticas, e cada método lidou com estas de uma forma diferente. Na integração de Verlet, bastou verificar se existe uma colisão, e caso esta ocorra, a componente $y$ da velocidade é invertida. Já com as EDO's a colisão é tratada como um novo lançamento, com a inversão dessa mesma componente.
