@@ -12,18 +12,19 @@ public class Physics2 : MonoBehaviour {
 
 	[SerializeField] private Settings UIM;
 	private float viscosity, angle, initial_velocity, gravity, mass, initialY;
-	private float tau;
+	
+	private int updateFrequency, nNewton;	
+	[HideInInspector] public int nCol;
 
 	[HideInInspector] public float[] col_arr;
 	private Vector2[] vel_arr, pos_arr;
 
-	public int nCol;
-	[SerializeField] private int nNewton;
-
 	enum Case {noCol, oneCol, manyCol, floor};
 	private Case myCase;
-	private float time;
+
 	[HideInInspector] public bool start;
+	private float time, deltaT;
+	private float tau;
 
     void Start() {
 		rt = gameObject.GetComponent<RectTransform>();
@@ -38,10 +39,14 @@ public class Physics2 : MonoBehaviour {
 	
 	void Update() {
 		if(!start) return;
-		rt.position = Get_position(time);
-
-		time += Time.deltaTime;
-	}
+		deltaT += Time.deltaTime;
+		float dt =  1.0f / updateFrequency;
+		while(deltaT >= dt){
+			rt.position = Get_position(time);
+			time += dt;
+			deltaT -= dt;
+		}
+    }
 
 	/*-------------------------------------------------------------------------*\
 	| Reset() atualiza as variaveis, calcula as colisões e reseta a simulação   |
@@ -56,7 +61,11 @@ public class Physics2 : MonoBehaviour {
 		gravity = UIM.ui_gravity;
 		mass = UIM.ui_mass;
 		initialY = UIM.ui_height;
-		
+		updateFrequency = (int) UIM.ui_timestep;
+		nNewton = (int) UIM.ui_iterations;
+		nCol = (int) UIM.ui_collisions;
+
+		deltaT = 0.0f;
 		tau = mass / viscosity;
 
 		time = 0.0f;
@@ -76,7 +85,7 @@ public class Physics2 : MonoBehaviour {
 		float dt;
 		col_arr[0] = 0.0f;
 		vel_arr[0] = new Vector2(iHorz, iVert);
-		pos_arr[0] = new Vector2(-7.1f, initialY);
+		pos_arr[0] = new Vector2(-8.0f, initialY);
 		switch(myCase){
 			case Case.floor:
 			case Case.noCol:
@@ -84,7 +93,7 @@ public class Physics2 : MonoBehaviour {
 				for(int i = 1; i < nCol; i++){
 					col_arr[i] = 0.0f;
 					vel_arr[i] = new Vector2(iHorz, iVert);
-					pos_arr[i] = new Vector2(-7.1f, initialY);
+					pos_arr[i] = new Vector2(-8.0f, initialY);
 				}
 				break;
 			case Case.oneCol:

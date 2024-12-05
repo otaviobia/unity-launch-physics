@@ -8,10 +8,13 @@ public class Physics : MonoBehaviour
 
 	[SerializeField] private Settings UIM;
 	private float viscosity, initial_velocity, angle, gravity, mass, initialY;
+	private int updateFrequency;
 	
 	[SerializeField] private RectTransform floor;
 	private float floorY;
 	private bool start;
+	
+	private float deltaT;
 
     void Start() {
 		start = false;
@@ -37,8 +40,10 @@ public class Physics : MonoBehaviour
 		gravity = UIM.ui_gravity;
 		mass = UIM.ui_mass;
 		initialY = UIM.ui_height;
+		updateFrequency = (int) UIM.ui_timestep;
 
-		rt.position = new Vector2(-7.1f, initialY);
+		deltaT = 0.0f;
+		rt.position = new Vector2(-8.0f, initialY);
 
 		acc = Vector2.zero;
 		float rad = angle * Mathf.PI / 180.0f;
@@ -59,16 +64,13 @@ public class Physics : MonoBehaviour
 
 
 	/*-------------------------------------------------------------------------*\
-	| Update() atualiza a particula após uma pequena variação de tempo,         |
-	|          usando a integração de verlet para calcular as novas condições   |
+	| UpdatePos() atualiza a particula após uma pequena variação de tempo dt,   |
+	|             usando a integração de verlet para calcular as novas condições|
 	\*-------------------------------------------------------------------------*/
-    void Update() {
-		if(!start) return;
-
-		// Verlet Integration
-		float dt = Time.deltaTime;
+	void UpdatePos(float dt){
 		Vector2 pos = transform.position;
 
+		// Verlet Integration
 		Vector2 newPos = pos + vel*dt + acc*(dt*dt/2.0f);
 		Vector2 newAcc = ApplyForces() / mass;
 		Vector2 newVel = vel + (acc + newAcc)*(dt/2.0f);
@@ -90,5 +92,15 @@ public class Physics : MonoBehaviour
 		// Update energy
 		float kinectEnergy = mass * vel.sqrMagnitude / 2.0f;
 		float potentialEnergy = mass * gravity * (bottomY - floorY);
+	}
+
+    void Update() {
+		if(!start) return;
+		deltaT += Time.deltaTime;
+		float dt =  1.0f / updateFrequency;
+		while(deltaT >= dt){
+			UpdatePos(dt);
+			deltaT -= dt;
+		}
     }
 }
