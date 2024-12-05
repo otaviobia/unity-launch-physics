@@ -95,7 +95,7 @@ y(t) &= (v_0 \sin\theta + g\tau^{2})(1- e^{\frac{-t}{\tau}}) -g\tau t,
 sendo $\tau$ definida como $\frac{m}{b}$.
 
 ### Integração de Verlet
-O método de Verlet é um algoritmo utilizado para o cálculo das posições de um corpo, muito usado para simulações, como em nosso caso.\\
+O método de Verlet é um algoritmo utilizado para o cálculo das posições de um corpo, muito usado para simulações, como em nosso caso.\
 Seu algoritmo busca reduzir o nível de erros nos cálculos utilizando as posições e aceleração anteriores para o cálculo da próxima posição. Assim, a cada pequena variação no tempo, a posição é recalculada e as variáveis são atualizadas para o próximo cálculo. Uma de suas vantagens é a conservação aproximada da energia do sistema, e é considerado um método mais estável que o de Euler.
 
 ## 4. O Projeto
