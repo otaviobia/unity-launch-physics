@@ -7,16 +7,17 @@ Disciplina: 7600105 - Física Básica I (2024).\
 Docente: Krissia de Zawadzki.
 
 |Nomes | N° USP | Atribuição|
-|------|-------|-----------|
+|:------:|:-------:|:-----------:|
 |Gustavo Alvares Andó|15457345|Código|
 |Lucas Rodrigues Baptista|15577631|Código|
 |Otávio Biagioni de Melo|15482604|Interface de Usuário|
 |Maria Clara de Souza Capato|15475294|Relatório|
 
 ## 2. Motivações e Descrição do Projeto
-Este projeto é uma simulação criada para ilustrar a trajetória de um Lançamento Oblíquo, com o objetivo de trazer uma representação visual e interativa para os usuários. Houve um foco maior para a interface, de forma que ela seja acessível e intuitiva para o uso.\
-Desenvolvido na Unity, a linguagem utilizado foi o C#.\ <!-- fonte dos ícones -->
-Quando pensamos em Lançamento Oblíquo estamos falando de uma trajetória com movimento em duas dimensões, comumente representadas pelos eixos x e y. Em aulas de física, a representação clássica do movimento é um tiro de canhão, ou um arremesso de um objeto de uma certa altura. Por isso, a representação escolhida foi justamenta a de um disparo de canhão, buscando uma visualização mais didática e lúdica, e a criação de uma relação entre a representação mais comum dessa trajetória no ensino.\
+Este projeto é uma simulação criada para ilustrar a trajetória de um Lançamento Oblíquo, com o objetivo de trazer uma representação visual e interativa para os usuários. Houve um foco maior para a interface, de forma que ela seja acessível e intuitiva para o uso. Desenvolvido na Unity, a linguagem utilizado foi o C#. <!-- fonte dos ícones --> \
+Quando pensamos em Lançamento Oblíquo estamos falando de uma trajetória com movimento em duas dimensões, comumente representadas pelos eixos x e y. Em aulas de física, a representação clássica do movimento é um tiro de canhão, ou um arremesso de um objeto de uma certa altura. Por isso, a representação escolhida buscou ser semelhante às mais comumente exploradas em aulas, trazendo uma visualização mais didática e lúdica e criando uma relação entre o que o usuário possa ter visto anteriormente em seus estudos.\
+O projeto foi inicialmente influenciado por uma simulação do Phet Colorado, a qual traz o movimento de um projétil disparado por um canhão de acordo com as configurações escolhidas pelo usuário. Nossa simulação se espelhou nessa forma de interação, tentando fazer com que o usuário sinta-se livre para brincar com as condições iniciais e assistir como cada fator influencia na trajetória do corpo teste.
+<!-- fotinho do projeto -->
 
 ## 3. Conceitos Físicos e Modelo Matemático
 ### Força Gravitacional
@@ -38,7 +39,7 @@ em que $b>0$ e $v$ a velocidade do corpo afetado. Essa força tem relação dire
 
 ### Sistema de Coordenadas
 
-### Movimento do Corpo
+### Movimento do Corpo e EDO's
 Nosso projétil sofre a ação de ambas as forças descritas acima, tendo sua posição representada por:
 
 $$\begin{equation}
@@ -54,7 +55,7 @@ v(t) = \dot{x}(t) \hat{i} + \dot{y}(t) \hat{j} + \dot{z}(t) \hat{k},
 e sua aceleração, derivada segunda da posição e primeira da velocidade é:
 
 $$\begin{equation}
-v(t) = \ddot{x}(t) \hat{i} + \ddot{y}(t) \hat{j} + \ddot{z}(t) \hat{k}.
+a(t) = \ddot{x}(t) \hat{i} + \ddot{y}(t) \hat{j} + \ddot{z}(t) \hat{k}.
 \end{equation}$$
 
 Como condições iniciais, temos:
@@ -71,6 +72,9 @@ $$\begin{align}
 \dot{z}(0) &= v_0 sin(\theta) .
 \end{align}$$
 
+### Integração de Verlet
+
+
 ## 4. O Projeto
 <!-- Como acessar o projeto -->
 ### Botões
@@ -82,12 +86,12 @@ Cada botão tem um ícone próprio, ilustrativo para sua função correspondente
 
 ### Configurações
 Acessando as configurações, é possível modificar os parâmetros e condições iniciais livremente.
-* Gravidade: varia de 0,01 a 100, em m/s².
-* Massa do Projétil: varia de 0,01 a 100, em kg;
-* Ângulo inicial: varia de 0 a 90, em graus;
-* Velocidade inicial: varia de 0,01 a 100, em m/s;
+* Gravidade: varia de 0 a 100, em m/s²;
+* Velocidade inicial: varia de 0 a 100, em m/s;
+* Ângulo inicial: varia de -90 a 90, em graus;
 * Viscosidade: varia de 0.01 a 10, em m²/s;
-* Altura Inicial: varia de 0 a 28, em metros.
+* Altura Inicial: varia de 0 a 28, em metros;
+* Massa do Projétil: varia de 0.1 a 100, em kg.
 
 ## Referências
 1. Phet Colorado, 2024. Disponível em: [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion). Acesso em 20 de novembro de 2024.
