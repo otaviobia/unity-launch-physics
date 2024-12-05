@@ -30,22 +30,18 @@ public class Physics2 : MonoBehaviour
 	enum Case {noCol, oneCol, manyCol, floor};
 	private Case myCase;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
 		rt = gameObject.GetComponent<RectTransform>();
 		start = false;
 		StartCoroutine(LateStart(1.0f));
     }
 
-    IEnumerator LateStart(float waitTime)
-    {
+    IEnumerator LateStart(float waitTime) {
         yield return new WaitForSeconds(waitTime);
 		Reset();
 	}
 
-    public void Reset()
-	{
+    public void Reset() {
 		start = false;
 		floorY = floor.position.y + floor.rect.height / 2.0f;
 		
@@ -67,112 +63,92 @@ public class Physics2 : MonoBehaviour
 		float iHorz = initial_velocity * Mathf.Cos(rad);
 		float iVert = initial_velocity * Mathf.Sin(rad);
 
-		// Nunca colide
-		// [TODO] viscosidade de gravidade == 0
-		if(angle == 0.0f && initialY == 0.0f){
-			for(int i = 0; i < nCol; i++){
-				col_arr[i] = 0.0f;
-				vel_arr[i] = new Vector2(iHorz, iVert);
-				pos_arr[i] = new Vector2(-7.1f, initialY);
-			}
+		if(angle == 0.0f && initialY == 0.0f) myCase = Case.floor;
+		else if(gravity == 0.0f && angle >= 0.0f) myCase = Case.noCol;
+		else if(gravity == 0.0f && angle < 0.0f) myCase = Case.oneCol;
+		else myCase = Case.manyCol;
 
-			myCase = Case.floor;
-			OnReady?.Invoke(this, EventArgs.Empty);
-			start = true;
-			return;
-			
-		} else if(gravity == 0.0f && angle >= 0){
-			for(int i = 0; i < nCol; i++){
-				col_arr[i] = 0.0f;
-				vel_arr[i] = new Vector2(iHorz, iVert);
-				pos_arr[i] = new Vector2(-7.1f, initialY);
-			}
-
-			myCase = Case.noCol;
-			OnReady?.Invoke(this, EventArgs.Empty);
-			start = true;
-			return;
-		} else if(gravity == 0.0f && angle < 0.0f){ // Uma colisão
-			col_arr[0] = 0;  col_arr[1] = Newton(iVert, initialY);
-			vel_arr[0] = new Vector2(iHorz, iVert);
-			pos_arr[0] = new Vector2(-7.1f, initialY);
-			float dt = col_arr[1] - col_arr[0];
-			vel_arr[1] = new Vector2(
-				Get_dx(vel_arr[0].x, dt),
-				-Get_dy(vel_arr[0].y, dt)
-			);
-			pos_arr[1] = pos_arr[0] + new Vector2(
-				Get_x(vel_arr[0].x, dt),
-				Get_y(vel_arr[0].y, dt)
-			);
-			for(int i = 2; i < nCol; i++){ 
-				col_arr[i] = col_arr[1]; 
-				pos_arr[i] = pos_arr[1]; 
-				vel_arr[i] = vel_arr[1]; 
-			}
-
-			myCase = Case.oneCol;
-			OnReady?.Invoke(this, EventArgs.Empty);
-			start = true;
-			return;
-		}
-		col_arr[0] = 0;  col_arr[1] = Newton(iVert, initialY);
+		float dt;
+		col_arr[0] = 0.0f;
 		vel_arr[0] = new Vector2(iHorz, iVert);
 		pos_arr[0] = new Vector2(-7.1f, initialY);
-		for(int i = 1; i < nCol - 1; i++){
-			float dt = col_arr[i] - col_arr[i-1];
-			vel_arr[i] = new Vector2(
-				Get_dx(vel_arr[i-1].x, dt),
-				-Get_dy(vel_arr[i-1].y, dt)
-			);
-			pos_arr[i] = pos_arr[i-1] + new Vector2(
-				Get_x(vel_arr[i-1].x, dt),
-				Get_y(vel_arr[i-1].y, dt)
-			);
-			col_arr[i+1] = col_arr[i] + Newton(vel_arr[i].y, pos_arr[i].y);
+		switch(myCase){
+			case Case.floor:
+			case Case.noCol:
+				for(int i = 1; i < nCol; i++){
+					col_arr[i] = 0.0f;
+					vel_arr[i] = new Vector2(iHorz, iVert);
+					pos_arr[i] = new Vector2(-7.1f, initialY);
+				}
+				break;
+			case Case.oneCol:
+				col_arr[1] = GetRoot(iVert, initialY);
+				dt = col_arr[1] - col_arr[0];
+				vel_arr[1] = new Vector2(
+					Get_dx(vel_arr[0].x, dt),
+					-Get_dy(vel_arr[0].y, dt)
+				);
+				pos_arr[1] = pos_arr[0] + new Vector2(
+					Get_x(vel_arr[0].x, dt),
+					Get_y(vel_arr[0].y, dt)
+				);
+				for(int i = 2; i < nCol; i++){ 
+					col_arr[i] = col_arr[1]; 
+					pos_arr[i] = pos_arr[1]; 
+					vel_arr[i] = vel_arr[1]; 
+				}
+				break;
+			case Case.manyCol:
+				col_arr[1] = GetRoot(iVert, initialY);
+				for(int i = 1; i < nCol - 1; i++){
+					dt = col_arr[i] - col_arr[i-1];
+					vel_arr[i] = new Vector2(
+						Get_dx(vel_arr[i-1].x, dt),
+						-Get_dy(vel_arr[i-1].y, dt)
+					);
+					pos_arr[i] = pos_arr[i-1] + new Vector2(
+						Get_x(vel_arr[i-1].x, dt),
+						Get_y(vel_arr[i-1].y, dt)
+					);
+					col_arr[i+1] = col_arr[i] + GetRoot(vel_arr[i].y, pos_arr[i].y);
+				}
+				break;
 		}
-		myCase = Case.manyCol;
+
 		OnReady?.Invoke(this, EventArgs.Empty);
 		start = true;
 	}
 
-	void Update()
-	{
+	void Update() {
 		if(!start) return;
 		rt.position = Get_position(time);
 
 		time += Time.deltaTime;
 	}
 
-	public Vector3 Get_position(float time)
-	{
+	public Vector3 Get_position(float time) {
         int i;
-        for (i = 0; i < nCol - 2; i++)
-        {
-            if (time < col_arr[i + 1]) break;
-        }
+        for (i = 0; i < nCol - 2; i++) if (time < col_arr[i + 1]) break;
+
         float x = Get_x(vel_arr[i].x, time - col_arr[i]);
         float y = Get_y(vel_arr[i].y, time - col_arr[i]);
-		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor)) y = Get_y(vel_arr[i].y, 0.0f);
+		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor))
+			y = Get_y(vel_arr[i].y, 0.0f);
 
         return pos_arr[i] + new Vector2(x, y);
     }
 
-	float Get_x(float initial_horz, float time)
-	{
-		if(viscosity == 0.0f) {
+	float Get_x(float initial_horz, float time) {
+		if(viscosity == 0.0f) 
 			return initial_horz * time;
-		}
 		float x = tau * initial_horz;
 		x *= 1.0f - Mathf.Exp(-time / tau);
 		return(x);
 	}
 
-    float Get_y(float initial_vert, float time)
-	{
-		if(viscosity == 0.0f){
+    float Get_y(float initial_vert, float time) {
+		if(viscosity == 0.0f) 
 			return initial_vert * time - gravity * time * time / 2.0f;
-		}
 		float y = initial_vert * tau;
 		y += gravity * tau * tau;
 		y *= 1.0f - Mathf.Exp(-time/tau);
@@ -180,28 +156,23 @@ public class Physics2 : MonoBehaviour
 		return(y);
 	}
 
-	float Get_dx(float initial_horz, float time)
-	{
-		if(viscosity == 0.0f){
+	float Get_dx(float initial_horz, float time) {
+		if(viscosity == 0.0f)
 			return initial_horz;
-		}
 		float dx = initial_horz * Mathf.Exp(-time/tau);
 		return dx;
 	}
 
-	float Get_dy(float initial_vert, float time)
-	{
-		if(viscosity == 0.0f){
+	float Get_dy(float initial_vert, float time) {
+		if(viscosity == 0.0f)
 			return initial_vert - gravity * time;
-		}
 		float dy = initial_vert + gravity * tau;
 		dy *= Mathf.Exp(-time / tau);
 		dy -= gravity * tau;
 		return(dy);
 	}
 	
-	float Get_t0(float initial_vert)
-	{
+	float Get_t0(float initial_vert) { // Dy == 0
 		float t0 = gravity * tau;
 		t0 /= initial_vert + gravity * tau;
 		t0 = Mathf.Log(t0);
@@ -209,26 +180,22 @@ public class Physics2 : MonoBehaviour
 		return(t0);
 	}
 
-	float Newton(float initial_vert, float initial_y)
-	{
-		if(viscosity == 0.0f){
-			float k = initial_y;
-			if(gravity == 0.0f){
-				float t1 = -k / initial_vert;
-				return t1;
+	float GetRoot(float initial_vert, float initial_y) {
+		float t;
+		if(viscosity == 0.0f && gravity == 0.0f){ // Mov. linear
+			t = -initial_y / initial_vert;
+		} else if(viscosity == 0.0f){ // Mov. Parabolico
+			t = initial_vert * initial_vert + 2.0f * gravity * initial_y;
+			t = Mathf.Sqrt(t);
+			t += initial_vert;
+			t /= gravity;
+		} else { // Método de Newton
+			t = 2.0f * Get_t0(initial_vert) + 0.1f; // add 0.1f in case angle == 0
+			if(initial_vert < 0) t = 0.0f;
+			for(int i = 0; i < nNewton; i++) {
+				float deltaY = initial_y - rt.rect.height/2.0f - floorY;
+				t -= (Get_y(initial_vert, t) + deltaY)/Get_dy(initial_vert, t);
 			}
-			float t0 = initial_vert * initial_vert + 2.0f * gravity * k;
-			t0 = Mathf.Sqrt(t0);
-			t0 += initial_vert;
-			t0 /= gravity;
-			return t0;
-		}
-		float t = 2.0f * Get_t0(initial_vert) + 0.1f; // angle = 0
-		if(initial_vert < 0) t = 0;
-		for(int i = 0; i < nNewton; i++)
-		{
-			float deltaY = initial_y - rt.rect.height/2.0f - floorY;
-			t -= (Get_y(initial_vert, t) + deltaY)/Get_dy(initial_vert, t);
 		}
 		return t;
 	}

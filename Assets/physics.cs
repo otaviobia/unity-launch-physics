@@ -11,19 +11,15 @@ public class Physics : MonoBehaviour
 	
 	[SerializeField] private RectTransform floor;
 	private float floorY;
-
 	private bool start;
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
 		start = false;
 		rt = gameObject.GetComponent<RectTransform>();
 		StartCoroutine(LateStart(1.0f));
     }
 
-    IEnumerator LateStart(float waitTime)
-    {
+    IEnumerator LateStart(float waitTime) {
         yield return new WaitForSeconds(waitTime);
 		Reset();
 	}
@@ -41,25 +37,20 @@ public class Physics : MonoBehaviour
 
 		rt.position = new Vector2(-7.1f, initialY);
 
-		//acc = ApplyForces() / mass;
 		acc = Vector2.zero;
 		float rad = angle * Mathf.PI / 180.0f;
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
-		Debug.Log(acc);
 		start = true;
 	}
 	
-	Vector2 ApplyForces()
-	{
+	Vector2 ApplyForces() {
 		Vector2 Fg = Vector2.down * gravity * mass;
 		Vector2 Fv = -vel * viscosity;
 		return(Fg + Fv);
 	}
 
-    // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 		if(!start) return;
 
 		// Verlet Integration
