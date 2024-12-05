@@ -10,8 +10,8 @@ public class SettingProps : MonoBehaviour
     [Header("Values")]
     public string settingName;
     [SerializeField] private float defaultValue;
-    [SerializeField] private float minValue;
-    [SerializeField] private float maxValue;
+    [SerializeField] public float minValue;
+    [SerializeField] public float maxValue;
 
     [HideInInspector] public Slider slider;
     [HideInInspector] public TMP_InputField input;

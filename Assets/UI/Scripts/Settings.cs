@@ -77,6 +77,8 @@ public class Settings : MonoBehaviour
     {
         SettingProps thisSetting = callerParent.GetComponent<SettingProps>();
         float newValue = float.Parse(thisSetting.input.text);
+        newValue = Mathf.Clamp(newValue, thisSetting.minValue, thisSetting.maxValue);
+        thisSetting.input.text = newValue.ToString();
         thisSetting.slider.value = newValue;
         switch (thisSetting.settingName)
         {
