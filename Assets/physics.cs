@@ -17,12 +17,16 @@ public class Physics : MonoBehaviour
 	
 	private float deltaT;
 
-	[SerializeField] private Color vColor, aColor;
+    private GameObject velLineObject, accLineObject;
+    [SerializeField] private GameObject vTriangle;
+    [SerializeField] private Color vColor, aColor;
 
     void Start() {
 		start = false;
 		rt = gameObject.GetComponent<RectTransform>();
 		StartCoroutine(LateStart(1.0f));
+
+		InstantiateVectors();
     }
 
     IEnumerator LateStart(float waitTime) {
@@ -53,21 +57,6 @@ public class Physics : MonoBehaviour
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
 		start = true;
-
-		GameObject velLineObject = new GameObject();
-		GameObject accLineObject = new GameObject();
-
-		lrVel = velLineObject.AddComponent<LineRenderer>();
-		lrVel.material = new Material(Shader.Find("Sprites/Default"));
-		lrVel.widthMultiplier = 0.05f;
-		lrVel.startColor = vColor;
-		lrVel.endColor = vColor;
-
-		lrAcc = accLineObject.AddComponent<LineRenderer>();
-		lrAcc.material = new Material(Shader.Find("Sprites/Default"));
-		lrAcc.widthMultiplier = 0.05f;
-		lrAcc.startColor = aColor;
-		lrAcc.endColor = aColor;
 	}
 	
 	/*-------------------------------------------------------------------------*\
@@ -126,7 +115,49 @@ public class Physics : MonoBehaviour
 			deltaT -= dt;
 		}
     }
-	
-	
 
+    /*-------------------------------------------------------------------------*\
+	| InstantiateVectors() cria LineRenderers e VectorTriangles para mostrar    |
+	| visualmente os vetores aceleração e velocidade dos objetos de teste.      |
+	\*-------------------------------------------------------------------------*/
+    void InstantiateVectors()
+    {
+        velLineObject = new GameObject("Vetor Velocidade");
+        velLineObject.transform.parent = transform;
+
+        accLineObject = new GameObject("Vetor Aceleração");
+        accLineObject.transform.parent = transform;
+
+        lrVel = velLineObject.AddComponent<LineRenderer>();
+        SetupLineRenderer(lrVel, vColor);
+        GameObject velTriangle = Instantiate(vTriangle, velLineObject.transform);
+        velTriangle.GetComponent<VectorTriangle>().vectorLine = lrVel;
+
+        lrAcc = accLineObject.AddComponent<LineRenderer>();
+        SetupLineRenderer(lrAcc, aColor);
+        GameObject accTriangle = Instantiate(vTriangle, accLineObject.transform);
+        accTriangle.GetComponent<VectorTriangle>().vectorLine = lrAcc;
+    }
+
+    /*-------------------------------------------------------------------------*\
+	| SetupLineRenderer() atribui valores para um componente LineRenderer.      |
+	\*-------------------------------------------------------------------------*/
+    void SetupLineRenderer(LineRenderer lr, Color color)
+    {
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.widthMultiplier = 0.05f;
+        lr.startColor = color;
+        lr.endColor = color;
+    }
+
+    /*-------------------------------------------------------------------------*\
+	| ToggleVector() é chamado por UI e alterna a visibilidade de um vetor.     |
+	\*-------------------------------------------------------------------------*/
+    public void ToggleVector(bool acceleration)
+    {
+        if (acceleration)
+            accLineObject.SetActive(!accLineObject.activeSelf);
+        else
+            velLineObject.SetActive(!velLineObject.activeSelf);
+    }
 }
