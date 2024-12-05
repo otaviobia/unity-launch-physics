@@ -5298,7 +5298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b3cb376b830de6a9a8adfb3c6465a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: {r: 0.9198113, g: 0.93260133, b: 1, a: 0.21960784}
+  col: {r: 0.9198113, g: 0.93260133, b: 1, a: 0.09803922}
   GridSize: 100
 --- !u!33 &968917097
 MeshFilter:
@@ -8252,8 +8252,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.80784315, g: 0.2784314, b: 0.3764706, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 502631b2ce87d5f4fb04096d84839872, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -9670,8 +9670,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.25882354, g: 0.61960787, b: 0.6509804, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 667b2b1f12a5d824eb43a76de3a28e1a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
