@@ -10,7 +10,7 @@ Docente: Krissia de Zawadzki.
 |:------:|:-------:|:-----------:|
 |Gustavo Alvares Andó|15457345|Código|
 |Lucas Rodrigues Baptista|15577631|Código|
-|Otávio Biagioni de Melo|15482604|Interface de Usuário|
+|Otávio Biagioni Melo|15482604|Interface de Usuário|
 |Maria Clara de Souza Capato|15475294|Relatório|
 
 ## 2. Motivações e Descrição do Projeto
