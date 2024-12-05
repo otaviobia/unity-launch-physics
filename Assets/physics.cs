@@ -24,6 +24,9 @@ public class Physics : MonoBehaviour
 		Reset();
 	}
 
+	/*-------------------------------------------------------------------------*\
+	| Reset() atualiza as variaveis e reseta a simulação                        |
+	\*-------------------------------------------------------------------------*/
 	public void Reset(){
 		start = false;
 		floorY = floor.position.y + floor.rect.height / 2.0f;
@@ -44,12 +47,21 @@ public class Physics : MonoBehaviour
 		start = true;
 	}
 	
+	/*-------------------------------------------------------------------------*\
+	| ApplyForces() calcula as forças gravitacional e viscosa,                  |
+	|               retornando a força resultante                               |
+	\*-------------------------------------------------------------------------*/
 	Vector2 ApplyForces() {
 		Vector2 Fg = Vector2.down * gravity * mass;
 		Vector2 Fv = -vel * viscosity;
 		return(Fg + Fv);
 	}
 
+
+	/*-------------------------------------------------------------------------*\
+	| Update() atualiza a particula após uma pequena variação de tempo,         |
+	|          usando a integração de verlet para calcular as novas condições   |
+	\*-------------------------------------------------------------------------*/
     void Update() {
 		if(!start) return;
 

@@ -2,33 +2,28 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Physics2 : MonoBehaviour
-{
+public class Physics2 : MonoBehaviour {
+
+	public event EventHandler<EventArgs> OnReady;
+	private RectTransform rt;
+
 	[SerializeField] private RectTransform floor;
 	private float floorY;
 
 	[SerializeField] private Settings UIM;
-	[SerializeField] private float viscosity, angle, initial_velocity, gravity, mass, initialY;
-	private Vector2 initialPos;
-
-	private RectTransform rt;
+	private float viscosity, angle, initial_velocity, gravity, mass, initialY;
+	private float tau;
 
 	[HideInInspector] public float[] col_arr;
-	[HideInInspector] private Vector2[] vel_arr, pos_arr;
-	private float time;
+	private Vector2[] vel_arr, pos_arr;
 
-	private float tau;
-	private float lastCol, nextCol;
-	private Vector2 initialVel;
-
-	public event EventHandler<EventArgs> OnReady;
-
-	[HideInInspector] public bool start;
-	
 	public int nCol;
 	[SerializeField] private int nNewton;
+
 	enum Case {noCol, oneCol, manyCol, floor};
 	private Case myCase;
+	private float time;
+	[HideInInspector] public bool start;
 
     void Start() {
 		rt = gameObject.GetComponent<RectTransform>();
@@ -49,7 +44,7 @@ public class Physics2 : MonoBehaviour
 	}
 
 	/*-------------------------------------------------------------------------*\
-	| Reset() atualiza as variaveis, (re)calcula as colisões e reseta asimulação
+	| Reset() atualiza as variaveis, calcula as colisões e reseta a simulação   |
 	\*-------------------------------------------------------------------------*/
 	public void Reset() {
 		start = false;
@@ -135,8 +130,8 @@ public class Physics2 : MonoBehaviour
 
 
 	/*-------------------------------------------------------------------------*\
-	| Get_position() retorna a posição da particula após o tempo time do inicio
-	                 da simulação.
+	| Get_position() retorna a posição da particula após o tempo time do inicio |
+	|                da simulação.                                              |
 	\*-------------------------------------------------------------------------*/
 	public Vector3 Get_position(float time) {
 		// Acha a ultima colisão que ocorreu: col_arr[i]
@@ -156,8 +151,8 @@ public class Physics2 : MonoBehaviour
 
 
 	/*-------------------------------------------------------------------------*\
-	| Get_x() e Get_y() retornam as coordenadas da particula após o tempo time
-	                    desde a ultima colisão.
+	| Get_x() e Get_y() retornam as coordenadas da particula após o tempo time  |
+	|                   desde a ultima colisão.                                 |
 	\*-------------------------------------------------------------------------*/
 	float Get_x(float initial_horz, float time) {
 		if(viscosity == 0.0f) 
@@ -178,8 +173,8 @@ public class Physics2 : MonoBehaviour
 	}
 
 	/*-------------------------------------------------------------------------*\
-	| Get_dx() e Get_dy() retornam as coordenadas da velocidade da particula
-	                      após um tempo time desde a ultima colisão.
+	| Get_dx() e Get_dy() retornam as coordenadas da velocidade da particula    |
+	|                     após um tempo time desde a ultima colisão.            |
 	\*-------------------------------------------------------------------------*/
 	float Get_dx(float initial_horz, float time) {
 		if(viscosity == 0.0f)
@@ -199,8 +194,8 @@ public class Physics2 : MonoBehaviour
 	
 
 	/*-------------------------------------------------------------------------*\
-	| Get_t0() retorna uma estimativa inicial para a raiz de Get_y(), sendo
-	           usada no método de Newton.
+	| Get_t0() retorna uma estimativa inicial para a raiz de Get_y(), sendo     |
+	|          usada no método de Newton.                                       |
 	\*-------------------------------------------------------------------------*/
 	float Get_t0(float initial_vert) { // Dy == 0
 		// Caso a trajétoria inicie com velocidade vertical negativa,
@@ -217,8 +212,8 @@ public class Physics2 : MonoBehaviour
 	}
 
 	/*-------------------------------------------------------------------------*\
-	| GetRoot() retorna a raiz de Get_y(), assim conseguimos calcular a próxima
-	            colisão da particula.
+	| GetRoot() retorna a raiz de Get_y(), assim conseguimos calcular a próxima |
+	|           colisão da particula.                                           |
 	\*-------------------------------------------------------------------------*/
 	float GetRoot(float initial_vert, float initial_y) {
 		float t;

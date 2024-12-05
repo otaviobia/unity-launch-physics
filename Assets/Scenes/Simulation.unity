@@ -6561,16 +6561,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 1528796116}
   UIM: {fileID: 852042811}
-  viscosity: 0
-  angle: 0
-  initial_velocity: 0
-  gravity: 0
-  mass: 0
-  initialY: 0
   col_arr: []
-  start: 0
   nCol: 50
   nNewton: 20
+  start: 0
 --- !u!212 &1625128543
 SpriteRenderer:
   m_ObjectHideFlags: 0
