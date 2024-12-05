@@ -26,7 +26,7 @@ Existem duas opções para a simulação, que podem ser comparadas ao mesmo temp
 
 ## 3. Conceitos Físicos e Modelo Matemático
 ### Força Gravitacional
-A força gravitacional $\vec{F_g}$ pode ser expressa por:
+A força gravitacional $\vec{F}\_g$ pode ser expressa por:
 
 $$\begin{equation}
 \vec{F}\_g = -mg \hat{j},
@@ -38,7 +38,7 @@ em que $m$ é a massa do corpo afetado, $g$ a gravidade e $\hat{k}$ o versor que
 A força viscosa $\vec{F}\_v$ é expressa por:
 
 $$\begin{equation}
-\vec{F_v} = -b\vec{v},
+\vec{F}\_v = -b\vec{v},
 \end{equation}$$
 
 em que $b>0$ e $\vec{v}$ a velocidade do corpo afetado. Essa força tem relação direta com velocidade do corpo, variando de forma proporcial à ela no tempo, mas com sentido contrário.
