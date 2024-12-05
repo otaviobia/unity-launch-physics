@@ -5,8 +5,9 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshFilter))]
 public class GridMesh : MonoBehaviour
 {
-	[SerializeField] private Color col;
+
     [SerializeField] private int GridSize;
+	[SerializeField] private Color col;
 
     void Awake()
     {
@@ -35,6 +36,7 @@ public class GridMesh : MonoBehaviour
         filter.mesh = mesh;
 
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
+        meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
         meshRenderer.material.color = col;
     }
 }

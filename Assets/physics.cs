@@ -5,6 +5,7 @@ public class Physics : MonoBehaviour
 {
 	private Vector2 vel, acc;
 	private RectTransform rt;
+	private LineRenderer lrVel, lrAcc;
 
 	[SerializeField] private Settings UIM;
 	private float viscosity, initial_velocity, angle, gravity, mass, initialY;
@@ -15,6 +16,8 @@ public class Physics : MonoBehaviour
 	private bool start;
 	
 	private float deltaT;
+
+	[SerializeField] private Color vColor, aColor;
 
     void Start() {
 		start = false;
@@ -50,6 +53,21 @@ public class Physics : MonoBehaviour
 		vel = Vector2.up * Mathf.Sin(rad) + Vector2.right * Mathf.Cos(rad);
 		vel *= initial_velocity;
 		start = true;
+
+		GameObject velLineObject = new GameObject();
+		GameObject accLineObject = new GameObject();
+
+		lrVel = velLineObject.AddComponent<LineRenderer>();
+		lrVel.material = new Material(Shader.Find("Sprites/Default"));
+		lrVel.widthMultiplier = 0.05f;
+		lrVel.startColor = vColor;
+		lrVel.endColor = vColor;
+
+		lrAcc = accLineObject.AddComponent<LineRenderer>();
+		lrAcc.material = new Material(Shader.Find("Sprites/Default"));
+		lrAcc.widthMultiplier = 0.05f;
+		lrAcc.startColor = aColor;
+		lrAcc.endColor = aColor;
 	}
 	
 	/*-------------------------------------------------------------------------*\
@@ -88,7 +106,12 @@ public class Physics : MonoBehaviour
 		transform.position = newPos;
 		vel = newVel;
 		acc = newAcc;
-		
+	
+		lrVel.SetPosition(0, newPos);
+		lrVel.SetPosition(1, newPos + vel);
+		lrAcc.SetPosition(0, newPos);
+		lrAcc.SetPosition(1, newPos + acc);
+
 		// Update energy
 		float kinectEnergy = mass * vel.sqrMagnitude / 2.0f;
 		float potentialEnergy = mass * gravity * (bottomY - floorY);
@@ -103,4 +126,7 @@ public class Physics : MonoBehaviour
 			deltaT -= dt;
 		}
     }
+	
+	
+
 }

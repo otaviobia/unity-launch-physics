@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Physics2 : MonoBehaviour {
 
+	private LineRenderer lrVel, lrAcc;
 	public event EventHandler<EventArgs> OnReady;
 	private RectTransform rt;
 
@@ -26,7 +27,9 @@ public class Physics2 : MonoBehaviour {
 	private float time, deltaT;
 	private float tau;
 
-    void Start() {
+	[SerializeField] private Color vColor, aColor;
+    
+	void Start() {
 		rt = gameObject.GetComponent<RectTransform>();
 		start = false;
 		StartCoroutine(LateStart(1.0f));
@@ -42,7 +45,17 @@ public class Physics2 : MonoBehaviour {
 		deltaT += Time.deltaTime;
 		float dt =  1.0f / updateFrequency;
 		while(deltaT >= dt){
-			rt.position = Get_position(time);
+			Vector2 pos = Get_position(time);
+			Vector2 vel = Get_velocity(time);
+			Vector2 acc = Get_acceleration(time);
+			
+
+			lrVel.SetPosition(0, pos);
+			lrVel.SetPosition(1, pos + vel);
+			lrAcc.SetPosition(0, pos);
+			lrAcc.SetPosition(1, pos + acc);
+
+			rt.position = pos;
 			time += dt;
 			deltaT -= dt;
 		}
@@ -63,7 +76,7 @@ public class Physics2 : MonoBehaviour {
 		initialY = UIM.ui_height;
 		updateFrequency = (int) UIM.ui_timestep;
 		nNewton = (int) UIM.ui_iterations;
-		nCol = (int) UIM.ui_collisions;
+		nCol = (int) UIM.ui_collisions + 2;
 
 		deltaT = 0.0f;
 		tau = mass / viscosity;
@@ -133,19 +146,39 @@ public class Physics2 : MonoBehaviour {
 				break;
 		}
 
+		GameObject velLineObject = new GameObject();
+		GameObject accLineObject = new GameObject();
+
+		lrVel = velLineObject.AddComponent<LineRenderer>();
+		lrVel.material = new Material(Shader.Find("Sprites/Default"));
+		lrVel.widthMultiplier = 0.05f;
+		lrVel.startColor = vColor;
+		lrVel.endColor = vColor;
+
+		lrAcc = accLineObject.AddComponent<LineRenderer>();
+		lrAcc.material = new Material(Shader.Find("Sprites/Default"));
+		lrAcc.widthMultiplier = 0.05f;
+		lrAcc.startColor = aColor;
+		lrAcc.endColor = aColor;
+
 		OnReady?.Invoke(this, EventArgs.Empty);
 		start = true;
 	}
 
+	/*-------------------------------------------------------------------------*\
+	| Get_lastCol() retorna o indice da ultima colisão que ocorreu no tempo time|
+	\*-------------------------------------------------------------------------*/
+	private int Get_lastCol(float time){
+        for (int i = 0; i < nCol - 2; i++) if (time < col_arr[i + 1]) return i;
+		return nCol - 2;
+	}
 
 	/*-------------------------------------------------------------------------*\
 	| Get_position() retorna a posição da particula após o tempo time do inicio |
 	|                da simulação.                                              |
 	\*-------------------------------------------------------------------------*/
 	public Vector3 Get_position(float time) {
-		// Acha a ultima colisão que ocorreu: col_arr[i]
-        int i;
-        for (i = 0; i < nCol - 2; i++) if (time < col_arr[i + 1]) break;
+        int i = Get_lastCol(time);
 
 		// Calcula a posição
         float x = Get_x(vel_arr[i].x, time - col_arr[i]);
@@ -155,9 +188,35 @@ public class Physics2 : MonoBehaviour {
 		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor))
 			y = Get_y(vel_arr[i].y, 0.0f);
 
+		// Transforma para ao sistema de coordenadas absoluto
         return pos_arr[i] + new Vector2(x, y);
     }
 
+	private Vector3 Get_velocity(float time) {
+        int i = Get_lastCol(time);
+
+		// Calcula a velocidade
+        float x = Get_dx(vel_arr[i].x, time - col_arr[i]);
+        float y = Get_dy(vel_arr[i].y, time - col_arr[i]);
+		// Após o fim da ultima colisão não atualiza mais o y
+		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor))
+			y = Get_dy(vel_arr[i].y, 0.0f);
+
+        return new Vector2(x, y);
+    }
+
+	private Vector3 Get_acceleration(float time) {
+        int i = Get_lastCol(time);
+
+		// Calcula a aceleração
+        float x = Get_ddx(vel_arr[i].x, time - col_arr[i]);
+        float y = Get_ddy(vel_arr[i].y, time - col_arr[i]);
+		// Após o fim da ultima colisão não atualiza mais o y
+		if(i >= nCol - 2 && (myCase == Case.manyCol|| myCase == Case.floor))
+			y = Get_ddy(vel_arr[i].y, 0.0f);
+
+        return new Vector2(x, y);
+    }
 
 	/*-------------------------------------------------------------------------*\
 	| Get_x() e Get_y() retornam as coordenadas da particula após o tempo time  |
@@ -200,7 +259,22 @@ public class Physics2 : MonoBehaviour {
 		dy -= gravity * tau;
 		return(dy);
 	}
-	
+
+	/*-------------------------------------------------------------------------*\
+	| Get_ddx() e Get_ddy() retornam as coordenadas da aceleração da particula  |
+	|                     após um tempo time desde a ultima colisão.            |
+	\*-------------------------------------------------------------------------*/
+	float Get_ddx(float initial_horz, float time){
+		float ddx = Mathf.Exp(-time / tau);
+		ddx *= -initial_horz / tau;
+		return ddx;
+	}
+
+	float Get_ddy(float initial_vert, float time){
+		float ddy = Mathf.Exp(-time / tau);
+		ddy *= - initial_vert / tau - gravity;
+		return ddy;
+	}
 
 	/*-------------------------------------------------------------------------*\
 	| Get_t0() retorna uma estimativa inicial para a raiz de Get_y(), sendo     |
