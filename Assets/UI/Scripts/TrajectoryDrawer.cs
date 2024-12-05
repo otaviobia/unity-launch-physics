@@ -45,6 +45,7 @@ public class TrajectoryDrawer : MonoBehaviour
             trajectoryRenderer.SetPosition(++trajectoryRenderer.positionCount - 1, physics2.Get_position(i));
 			if(colIndex < physics2.nCol - 1 && i <= physics2.col_arr[colIndex] && i+dt > physics2.col_arr[colIndex]){
 				trajectoryRenderer.SetPosition(++trajectoryRenderer.positionCount - 1, physics2.Get_position(physics2.col_arr[colIndex++]));
+				while(colIndex < physics2.nCol - 1 && i+dt > physics2.col_arr[colIndex]) colIndex++;
 			}
         }
     }
