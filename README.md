@@ -4,7 +4,7 @@ Veja uma [demonstração](https://otavio.fun/fisica)!
 
 ## 1. Integrantes do Grupo e Responsabilidades
 Disciplina: 7600105 - Física Básica I (2024).\
-Docente: Krissia de Zawadzki.
+Docentes: Krissia de Zawadzki e Esmerindo de Sousa Bernardes.
 
 |Nomes | N° USP | Atribuição|
 |:------:|:-------:|:-----------:|
