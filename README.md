@@ -89,7 +89,7 @@ e às seguintes EDO's,
 
 $$\begin{align}
 \ddot{x}(t) &= \frac{-b}{m}\dot{x}(t),\\
-\ddot{y}(t) &= \frac{-b}{m}\dot{y}(t),
+\ddot{y}(t) &= \frac{-b}{m}\dot{y}(t) - g,
 \end{align}$$
 
 as quais têm suas soluções dadas por:
