@@ -81,8 +81,8 @@ Aplicando a 2ª Lei de Newton, chegamos às seguintes equações
 
 $$\begin{align}
 -mg\hat{j} -b\vec{v}(t) &= m(\ddot{x}(t)\hat{i} + \ddot{y}(t)\hat{j}),\\
-\ddot{x}(t) + b{y}(t) &= 0,\\
-\ddot{y}(t) + b{y}(t) + mg &= 0,
+m\ddot{x}(t) + b{\dot{x}}(t) &= 0,\\
+m\ddot{y}(t) + b{\dot{y}}(t) + mg &= 0,
 \end{align}$$
 
 e às seguintes EDO's,
