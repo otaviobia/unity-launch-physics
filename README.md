@@ -1,6 +1,6 @@
 # Simulação de Lançamento Oblíquo em Unity C#
 
-Veja uma [demonstração](https://otavio.fun/fisica)!
+Clique para ver uma [demonstração](https://otavio.fun/fisica)! Ou baixe uma build para Windows ou Linux nas Releases do projeto.
 
 ## 1. Integrantes do Grupo e Responsabilidades
 Disciplina: 7600105 - Física Básica I (2024).\
@@ -160,6 +160,11 @@ Acessando as configurações, é possível modificar os parâmetros e condiçõe
   <img src="imagens/config.png" alt="Descrição da imagem">
   <br>
 </p>
+
+## Instalando o Projeto
+- Clone o projeto
+- Abra-o com a Unity [2022.3.52f1](https://unity.com/pt/releases/editor/whats-new/2022.3.52)
+- Acesse a cena "Simulation" e aperte Play
 
 ## Referências
 1. Phet Colorado, 2024. Disponível em: [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion). Acesso em 20 de novembro de 2024.
