@@ -18,7 +18,11 @@ Este projeto é uma simulação criada para ilustrar a trajetória de um Lançam
 Quando pensamos em Lançamento Oblíquo estamos falando de uma trajetória com movimento em duas dimensões, comumente representadas pelos eixos x e y. Em aulas de física, a representação clássica do movimento é um tiro de canhão, ou um arremesso de um objeto de uma certa altura. Por isso, a representação escolhida buscou ser semelhante às mais comumente exploradas em aulas, trazendo uma visualização mais didática e lúdica e criando uma relação entre o que o usuário possa ter visto anteriormente em seus estudos.\
 O projeto foi inicialmente influenciado por uma simulação do [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion), a qual traz o movimento de um projétil disparado por um canhão de acordo com as configurações escolhidas pelo usuário. Nossa simulação se espelhou nessa forma de interação, tentando fazer com que o usuário sinta-se livre para brincar com as condições iniciais e assistir como cada fator influencia na trajetória do corpo teste. \
 Existem duas opções para a simulação, que podem ser comparadas ao mesmo tempo: a utilizando a resolução das EDO's que serão apresentadas a seguir (em azul) e a utilizando a integração de Verlet (em vermelho).
+
+![](https://github.com/unity-launch-physics/falling.gif)
 <!-- fotinho do projeto -->
+
+
 
 ## 3. Conceitos Físicos e Modelo Matemático
 ### Força Gravitacional
