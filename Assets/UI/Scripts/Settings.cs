@@ -2,6 +2,9 @@ using UnityEngine;
 
 // Importando uma biblioteca de Tweening para animar elementos da interface por código
 using DG.Tweening;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
 
 /*
  * A classe Settings é responsável pela interação usuário-painel-código das configurações.
