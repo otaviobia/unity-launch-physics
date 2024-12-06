@@ -22,7 +22,7 @@ Existem duas opções para a simulação, que podem ser comparadas ao mesmo temp
 ![](./imagens/falling.gif)
 
 $$\begin{align}
-\text{Simulação de queda livre.}
+\text{Simulação de queda.}
 \end{align}$$
 
 ## 3. Conceitos Físicos e Modelo Matemático
