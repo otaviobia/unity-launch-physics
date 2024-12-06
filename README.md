@@ -19,10 +19,11 @@ Quando pensamos em Lançamento Oblíquo estamos falando de uma trajetória com m
 O projeto foi inicialmente influenciado por uma simulação do [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion), a qual traz o movimento de um projétil disparado por um canhão de acordo com as configurações escolhidas pelo usuário. Nossa simulação se espelhou nessa forma de interação, tentando fazer com que o usuário sinta-se livre para brincar com as condições iniciais e assistir como cada fator influencia na trajetória do corpo teste. \
 Existem duas opções para a simulação, que podem ser comparadas ao mesmo tempo: a utilizando a resolução das EDO's que serão apresentadas a seguir (em azul) e a utilizando a integração de Verlet (em vermelho).
 
-![](https://github.com/otaviobia/unity-launch-physics/tree/main/imagens/falling.gif)
-<!-- fotinho do projeto -->
+![](./imagens/falling.gif)
 
-
+$$\begin{align}
+\text{Simulação de queda livre.}
+\end{align}$$
 
 ## 3. Conceitos Físicos e Modelo Matemático
 ### Força Gravitacional
@@ -42,6 +43,12 @@ $$\begin{equation}
 \end{equation}$$
 
 em que $b>0$ e $\vec{v}$ a velocidade do corpo afetado. Essa força tem relação direta com velocidade do corpo, variando de forma proporcial à ela no tempo, mas com sentido contrário.
+
+![abc](./imagens/viscosity.gif)
+
+$$\begin{align}
+\text{Simulação com viscosidade.}
+\end{align}$$
 
 ### Movimento do Corpo e EDO's
 Nosso projétil sofre a ação de ambas as forças descritas acima, tendo sua posição nos eixos $x$ (horizontal, orientado positivamente para a direita) e $y$ (vertical, orientado positivamente para cima) representada por:
@@ -94,6 +101,12 @@ y(t) &= (v_0 \sin\theta + g\tau^{2})(1- e^{\frac{-t}{\tau}}) -g\tau t,
 
 sendo $\tau$ definida como $\frac{m}{b}$.
 
+![](./imagens/noviscosity.gif)
+
+$$\begin{align}
+\text{Simulação sem viscosidade.}
+\end{align}$$
+
 ### Integração de Verlet
 O método de Verlet é um algoritmo utilizado para o cálculo das posições de um corpo, muito usado para simulações, como em nosso caso.\
 Seu algoritmo busca reduzir o nível de erros nos cálculos utilizando as posições e aceleração anteriores para o cálculo da próxima posição. Assim, a cada pequena variação no tempo, a posição é recalculada e as variáveis são atualizadas para o próximo cálculo. Uma de suas vantagens é a conservação aproximada da energia do sistema, e é considerado um método mais estável que o de Euler. Suas equações são dadas por:
@@ -125,12 +138,10 @@ Cada botão tem um ícone próprio, ilustrativo para sua função correspondente
 * Lupas: Aumentam, diminuem ou reiniciam o zoom da câmera (pode ser alterado pelo scroll do mouse);
 * Setas: Movimentam a câmera horizontalmente (pode ser movido com as setinhas do teclado).
 
-<!-- Print só dos botões 
 <p align="center">
-  <img src="imagens/Botoes.png" alt="Descrição da imagem">
+  <img src="imagens/botoes.png" alt="Descrição da imagem">
   <br>
 </p>
--->
 
 ### Configurações
 Acessando as configurações, é possível modificar os parâmetros e condições iniciais livremente.
@@ -145,12 +156,10 @@ Acessando as configurações, é possível modificar os parâmetros e condiçõe
 * Colisões calculadas: varia de 0 a 100;
 * Iterações do Método de Newton: varia de 0 a 10.
 
-<!-- Print só da barra de configurações aberta 
 <p align="center">
-  <img src="imagens/Config.png" alt="Descrição da imagem">
+  <img src="imagens/config.png" alt="Descrição da imagem">
   <br>
 </p>
--->
 
 ## Referências
 1. Phet Colorado, 2024. Disponível em: [Phet Colorado](https://phet.colorado.edu/pt_BR/simulations/projectile-motion). Acesso em 20 de novembro de 2024.
